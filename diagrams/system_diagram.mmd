@@ -1,0 +1,14 @@
+%% Vibe Recommender: simplified energy-level flow
+flowchart LR
+    U([User picks energy level]) --> AIR[AI information retriever<br/>finds songs near that energy]
+    SI[(Song index<br/>energy scores)] --> AIR
+    AIR --> PL[Playlist output]
+
+    CUR{{Curator review<br/>checks energy labels}} -.-> SI
+    TEST{{User testing<br/>rates playlist fit}} -.-> PL
+
+    
+    class U input
+    class AIR,SI process
+    class PL output
+    class CUR,TEST human

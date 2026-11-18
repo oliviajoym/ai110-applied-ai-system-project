@@ -2,13 +2,13 @@
 
 ## 1. Model Name  
 
-**EnergyMaxer 1.0**  
+**Vibe Music Meter 1.0**  
 
 ---
 
 ## 2. Intended Use  
 
-This is mostly classroom exploration. A very small scoring song recommendor.
+A song recommender based on desired engery level.
 
 ---
 
