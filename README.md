@@ -2,7 +2,8 @@
 
 ## Project Summary
 
-This project is a small music recommender system. The goal is to have the system recommend songs that are geared towards the users preference of enegry level. The  porject analyzes dongs to find the best songs to fit the user's suitable vibe.
+This project is a small music recommender system. This is an extension of Module 3 Music Recommender Project. 
+The goal is to have the system recommend songs that are geared towards the users preference of enegry level. The  porject analyzes dongs to find the best songs to fit the user's suitable vibe.
 
 ## Architecture Overview
 
