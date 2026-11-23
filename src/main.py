@@ -10,7 +10,8 @@ You will implement the functions in recommender.py:
 """
 
 from src.recommender import load_songs, recommend_songs
-
+from src.ai_recommender import rag_recommend, embed_songs, client
+from tabulate import tabulate
 
 def main() -> None:
     songs = load_songs("data/songs.csv") 
@@ -19,7 +20,7 @@ def main() -> None:
     user_prefs = {"favorite_genre": "pop", "target_energy": 0.8, "acoustic_lvl": 0.2, "valence_lvl": 0.9}
 
     recommendations = recommend_songs(user_prefs, songs, k=5)
-
+    '''
     print("\nTop recommendations:\n")
     for rec in recommendations:
         # You decide the structure of each returned item.
@@ -28,7 +29,19 @@ def main() -> None:
         print(f"{song.title} - Score: {score:.2f}")
         print(f"Because: {explanation}")
         print()
+    '''
+    rows = [
+        [idx, song.title, f"{score:.2f}", explanation.replace("; ", "\n")]
+        for idx, (song, score, explanation) in enumerate(recommendations, start=1)
+    ]
+    print("\nTop recommendations:\n")
+    print(tabulate(rows, headers=["#", "Title", "Score", "Reasons"], tablefmt="grid"))
 
+    #  ai_recs = __method_ai_rec___(user_prefs, songs, k=5)
+    client = client()
+    song_vec = embed_songs(songs,client)
+
+    print(rag_recommend(user_prefs, songs, song_vec, client, k=5))
 
 if __name__ == "__main__":
     main()
