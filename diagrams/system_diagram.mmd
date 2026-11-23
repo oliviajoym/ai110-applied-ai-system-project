@@ -1,14 +1,33 @@
 %% Vibe Recommender: simplified energy-level flow
 flowchart LR
-    U([User picks energy level]) --> AIR[AI information retriever<br/>finds songs near that energy]
-    SI[(Song index<br/>energy scores)] --> AIR
-    AIR --> PL[Playlist output]
+    CSV[(data/songs.csv)] --> LS[load_songs<br/>recommender.py]
+    LS --> SONGS[List of Song objects]
 
-    CUR{{Curator review<br/>checks energy labels}} -.-> SI
-    TEST{{User testing<br/>rates playlist fit}} -.-> PL
+    UP[User profile<br/>genre, energy, valence, acousticness] --> RS[recommend_songs<br/>score_song: rule-based scoring]
+    SONGS --> RS
+    RS --> TOP[Top k candidates<br/>song, score, reasons]
 
-    
-    class U input
-    class AIR,SI process
-    class PL output
-    class CUR,TEST human
+    SONGS --> EMB[embed_songs<br/>ai_recommender.py: Gemini embeddings]
+    EMB --> VEC[(Song vectors)]
+
+    TOP --> RAG[rag_recommend<br/>builds prompt from candidates]
+    UP --> RAG
+    VEC -.->|stored for future semantic ranking| RAG
+    RAG --> GEM[Gemini generate_content<br/>picks best k, explains choices]
+
+    TOP --> TAB[Table output<br/>main.py: tabulate]
+    GEM --> OUT[Final text output<br/>main.py: print]
+
+    GUARD{{Output guardrail<br/>check titles against candidates}} -.-> GEM
+    EVAL{{evaluate.py<br/>test profiles and checks}} -.-> RS
+
+    classDef data fill:#F1EFE8,stroke:#5F5E5A,color:#2C2C2A
+    classDef process fill:#EEEDFE,stroke:#534AB7,color:#26215C
+    classDef ai fill:#E6F1FB,stroke:#185FA5,color:#042C53
+    classDef output fill:#E1F5EE,stroke:#0F6E56,color:#04342C
+    classDef check fill:#FBEAF0,stroke:#993556,color:#4B1528
+    class CSV,SONGS,VEC,UP data
+    class LS,RS,TOP,RAG process
+    class EMB,GEM ai
+    class TAB,OUT output
+    class GUARD,EVAL check
